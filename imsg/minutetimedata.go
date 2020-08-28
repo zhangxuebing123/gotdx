@@ -3,7 +3,6 @@ package imsg
 import (
 	"bytes"
 	"encoding/binary"
-	"fmt"
 )
 
 type TDXMinuteTimeDataRequest struct {
@@ -39,19 +38,19 @@ type TDXMinuteTimeDataMessage struct {
 }
 
 func NewTDXMinuteTimeDataMessage(req TDXMinuteTimeDataRequest) *TDXMinuteTimeDataMessage {
-	msg := GetMessage(KMSMG_MINUTETIMEDATA)
+	msg := GetMessage(KMSG_MINUTETIMEDATA)
 	if (msg == nil) {
-		Register(KMSMG_MINUTETIMEDATA, new(TDXMinuteTimeDataMessage))
+		Register(KMSG_MINUTETIMEDATA, new(TDXMinuteTimeDataMessage))
 	}
-	sub := GetMessage(KMSMG_MINUTETIMEDATA).(*TDXMinuteTimeDataMessage)
+	sub := GetMessage(KMSG_MINUTETIMEDATA).(*TDXMinuteTimeDataMessage)
 	sub.TDXMinuteTimeDataRequest = req
 	sub.TDXReqHeader = TDXReqHeader{0x0c, SeqID(), 0,
-		0xe, 0xe, KMSMG_MINUTETIMEDATA}
+		0xe, 0xe, KMSG_MINUTETIMEDATA}
 	return sub
 }
 
 func (c *TDXMinuteTimeDataMessage) MessageNumber() int32 {
-	return KMSMG_INDEXBARS
+	return KMSG_INDEXBARS
 }
 
 func (c *TDXMinuteTimeDataMessage) Serialize() ([]byte, error) {
@@ -78,7 +77,6 @@ func (c *TDXMinuteTimeDataMessage) UnSerialize(header interface{}, b []byte) err
 		if( index ==  0){
 			lastprice = priceraw
 		}
-		fmt.Println(ele)
 		c.List = append(c.List, ele)
 	}
 	return nil

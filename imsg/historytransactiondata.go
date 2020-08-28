@@ -34,19 +34,19 @@ type TDXHistoryTransactionDataMessage struct {
 }
 
 func NewTDXHistoryTransactionDataMessage(req TDXHistoryTransactionDataRequest) *TDXHistoryTransactionDataMessage {
-	msg := GetMessage(KMSMG_HISTORYTRANSACTIONDATA)
+	msg := GetMessage(KMSG_HISTORYTRANSACTIONDATA)
 	if (msg == nil) {
-		Register(KMSMG_HISTORYTRANSACTIONDATA, new(TDXHistoryTransactionDataMessage))
+		Register(KMSG_HISTORYTRANSACTIONDATA, new(TDXHistoryTransactionDataMessage))
 	}
-	sub := GetMessage(KMSMG_HISTORYTRANSACTIONDATA).(*TDXHistoryTransactionDataMessage)
+	sub := GetMessage(KMSG_HISTORYTRANSACTIONDATA).(*TDXHistoryTransactionDataMessage)
 	sub.TDXHistoryTransactionDataRequest = req
 	sub.TDXReqHeader = TDXReqHeader{0x0c, SeqID(), 0,
-		0x12, 0x12, KMSMG_HISTORYTRANSACTIONDATA}
+		0x12, 0x12, KMSG_HISTORYTRANSACTIONDATA}
 	return sub
 }
 
 func (c* TDXHistoryTransactionDataMessage) MessageNumber() int32 {
-	return KMSMG_HISTORYTRANSACTIONDATA
+	return KMSG_HISTORYTRANSACTIONDATA
 }
 
 func (c* TDXHistoryTransactionDataMessage) Serialize() ([]byte, error) {

@@ -22,7 +22,7 @@ type TDXSecurityCountMessage struct {
 	TDXSecurityCountResponse
 }
 
-func NewSecurityCountMessage(req TDXSecurityCountRequest) *TDXSecurityCountMessage {
+func NewTDXSecurityCountMessage(req TDXSecurityCountRequest) *TDXSecurityCountMessage {
 	msg := GetMessage(KMSG_SECURITYCOUNT)
 	if (msg == nil) {
 		Register(KMSG_SECURITYCOUNT, new(TDXSecurityCountMessage))

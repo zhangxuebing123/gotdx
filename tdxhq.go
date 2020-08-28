@@ -22,6 +22,8 @@ type ITdxHq interface {
 	HistoryTransactionData(TDXHistoryTransactionDataRequest) TDXHistoryTransactionDataResponse
 	IndexBars(TDXIndexBarsRequest) TDXIndexBarsResponse
 	MinuteTimeData(TDXMinuteTimeDataRequest) TDXMinuteTimeDataResponse
+	SecurityList(TDXSecurityListRequest) TDXSecurityListResponse
+	SecurityQuotes(TDXSecurityQuotesRequest) TDXSecurityQuotesResponse
 }
 
 func NewTdxHq() ITdxHq {
@@ -37,7 +39,7 @@ type TdxHq struct {
 }
 
 func (t *TdxHq) SecurityCount(req TDXSecurityCountRequest) TDXSecurityCountResponse {
-	msg, _ := t.conn.Write(NewSecurityCountMessage(req))
+	msg, _ := t.conn.Write(NewTDXSecurityCountMessage(req))
 	return msg.(*TDXSecurityCountMessage).TDXSecurityCountResponse
 }
 
@@ -112,7 +114,7 @@ func (t *TdxHq) HistoryMinuteTimeDate(req TDXHistoryMinuteTimeDateRequest) TDXHi
 	return msg.(*TDXHistoryMinuteTimeDateMessage).TDXHistoryMinuteTimeDateResponse
 }
 
-func (t *TdxHq) HistoryTransactionData(req TDXHistoryTransactionDataRequest) TDXHistoryTransactionDataResponse{
+func (t *TdxHq) HistoryTransactionData(req TDXHistoryTransactionDataRequest) TDXHistoryTransactionDataResponse {
 	msg, _ := t.conn.Write(NewTDXHistoryTransactionDataMessage(req))
 	return msg.(*TDXHistoryTransactionDataMessage).TDXHistoryTransactionDataResponse
 }
@@ -122,9 +124,19 @@ func (t *TdxHq) IndexBars(req TDXIndexBarsRequest) TDXIndexBarsResponse {
 	return msg.(*TDXIndexBarsMessage).TDXIndexBarsResponse
 }
 
-func (t *TdxHq) MinuteTimeData(req TDXMinuteTimeDataRequest) TDXMinuteTimeDataResponse{
+func (t *TdxHq) MinuteTimeData(req TDXMinuteTimeDataRequest) TDXMinuteTimeDataResponse {
 	msg, _ := t.conn.Write(NewTDXMinuteTimeDataMessage(req))
 	return msg.(*TDXMinuteTimeDataMessage).TDXMinuteTimeDataResponse
+}
+
+func (t *TdxHq) SecurityList(req TDXSecurityListRequest) TDXSecurityListResponse {
+	msg, _ := t.conn.Write(NewTDXSecurityListMessage(req))
+	return msg.(*TDXSecurityListMessage).TDXSecurityListResponse
+}
+
+func (t *TdxHq) SecurityQuotes(req TDXSecurityQuotesRequest) TDXSecurityQuotesResponse {
+	msg, _ := t.conn.Write(NewTDXSecurityQuotesMessage(req))
+	return msg.(*TDXSecurityQuotesMessage).TDXSecurityQuotesResponse
 }
 
 func (t *TdxHq) OnConnect(c WriteCloser) bool {
@@ -137,7 +149,7 @@ func (t *TdxHq) OnConnect(c WriteCloser) bool {
 		// 维持心跳
 		cc.RunEvery(time.Second, func(i time.Time, closer WriteCloser) {
 			if (((time.Now().UnixNano() - cc.HeartBeat()) / 1000000000) >= DEFAULT_HEARTBEAT_INTERVAL) {
-				cc.Write(NewSecurityCountMessage(TDXSecurityCountRequest{rand.Int31n(2)}))
+				cc.Write(NewTDXSecurityCountMessage(TDXSecurityCountRequest{rand.Int31n(2)}))
 			}
 		})
 		t.complete <- true

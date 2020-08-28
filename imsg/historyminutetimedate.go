@@ -35,19 +35,19 @@ type TDXHistoryMinuteTimeDateMessage struct {
 }
 
 func NewTDXHistoryMinuteTimeDateMessage(req TDXHistoryMinuteTimeDateRequest) *TDXHistoryMinuteTimeDateMessage {
-	msg := GetMessage(KMSMG_HISTORYMINUTETIMEDATE)
+	msg := GetMessage(KMSG_HISTORYMINUTETIMEDATE)
 	if (msg == nil) {
-		Register(KMSMG_HISTORYMINUTETIMEDATE, new(TDXHistoryMinuteTimeDateMessage))
+		Register(KMSG_HISTORYMINUTETIMEDATE, new(TDXHistoryMinuteTimeDateMessage))
 	}
-	sub := GetMessage(KMSMG_HISTORYMINUTETIMEDATE).(*TDXHistoryMinuteTimeDateMessage)
+	sub := GetMessage(KMSG_HISTORYMINUTETIMEDATE).(*TDXHistoryMinuteTimeDateMessage)
 	sub.TDXHistoryMinuteTimeDateRequest = req
 	sub.TDXReqHeader = TDXReqHeader{0x0c, SeqID(), 0,
-		0x0d, 0x0d, KMSMG_HISTORYMINUTETIMEDATE}
+		0x0d, 0x0d, KMSG_HISTORYMINUTETIMEDATE}
 	return sub
 }
 
 func (c* TDXHistoryMinuteTimeDateMessage) MessageNumber() int32 {
-	return KMSMG_HISTORYMINUTETIMEDATE
+	return KMSG_HISTORYMINUTETIMEDATE
 }
 
 func (c* TDXHistoryMinuteTimeDateMessage) Serialize() ([]byte, error) {

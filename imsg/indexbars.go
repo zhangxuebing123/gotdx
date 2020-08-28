@@ -59,20 +59,20 @@ type TDXIndexBarsMessage struct {
 }
 
 func NewTDXIndexBarsMessage(req TDXIndexBarsRequest) *TDXIndexBarsMessage {
-	msg := GetMessage(KMSMG_INDEXBARS)
+	msg := GetMessage(KMSG_INDEXBARS)
 	if (msg == nil) {
-		Register(KMSMG_INDEXBARS, new(TDXIndexBarsMessage))
+		Register(KMSG_INDEXBARS, new(TDXIndexBarsMessage))
 	}
-	sub := GetMessage(KMSMG_INDEXBARS).(*TDXIndexBarsMessage)
+	sub := GetMessage(KMSG_INDEXBARS).(*TDXIndexBarsMessage)
 	sub.TDXIndexBarsRequest = req
 	sub.Content = "00000000000000000000"
 	sub.TDXReqHeader = TDXReqHeader{0x0c, SeqID(), 0,
-		0x1c, 0x1c, KMSMG_INDEXBARS}
+		0x1c, 0x1c, KMSG_INDEXBARS}
 	return sub
 }
 
 func (c *TDXIndexBarsMessage) MessageNumber() int32 {
-	return KMSMG_INDEXBARS
+	return KMSG_INDEXBARS
 }
 
 func (c *TDXIndexBarsMessage) Serialize() ([]byte, error) {

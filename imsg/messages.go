@@ -97,19 +97,21 @@ const (
 )
 
 const (
-	KMSG_CMD1                    = 0x0d   // 建立链接
-	KMSG_CMD2                    = 0x0fdb // 建立链接
-	KMSG_HEARTBEAT               = 0xFFFF // 心跳(自定义)
-	KMSG_SECURITYCOUNT           = 0x44e  // 证券数量
-	KMSG_BLOCKINFOMETA           = 0x2c5  // 板块文件信息
-	KMSG_BLOCKINFO               = 0x6b9  // 板块文件
-	KMSG_COMPANYCATEGORY         = 0x2cf  // 公司信息文件信息
-	KMSG_COMPANYCONTENT          = 0x2d0  // 公司信息描述
-	KMSG_FINANCEINFO             = 0x10   // 财务信息
-	KMSMG_HISTORYMINUTETIMEDATE  = 0xfb4  // 历史分时信息
-	KMSMG_HISTORYTRANSACTIONDATA = 0xfb5  // 历史分笔成交信息
-	KMSMG_INDEXBARS              = 0x52d  // 指数K线
-	KMSMG_MINUTETIMEDATA         = 0x537  //0x51d  // 分时数据
+	KMSG_CMD1                   = 0x0d   // 建立链接
+	KMSG_CMD2                   = 0x0fdb // 建立链接
+	KMSG_HEARTBEAT              = 0xFFFF // 心跳(自定义)
+	KMSG_SECURITYCOUNT          = 0x44e  // 证券数量
+	KMSG_BLOCKINFOMETA          = 0x2c5  // 板块文件信息
+	KMSG_BLOCKINFO              = 0x6b9  // 板块文件
+	KMSG_COMPANYCATEGORY        = 0x2cf  // 公司信息文件信息
+	KMSG_COMPANYCONTENT         = 0x2d0  // 公司信息描述
+	KMSG_FINANCEINFO            = 0x10   // 财务信息
+	KMSG_HISTORYMINUTETIMEDATE  = 0xfb4  // 历史分时信息
+	KMSG_HISTORYTRANSACTIONDATA = 0xfb5  // 历史分笔成交信息
+	KMSG_INDEXBARS              = 0x52d  // 指数K线
+	KMSG_MINUTETIMEDATA         = 0x537  // 分时数据
+	KMSG_SECURITYLIST           = 0x450  // 证券列表
+	KMSG_SECURITYQUOTES			= 0x53e  // 行情信息
 )
 
 type TDXReqHeader struct {
@@ -236,7 +238,7 @@ func getdatetimenow(category int, lasttime string) (year int, month int, day int
 			utime = utime.AddDate(0, 0, 1)
 			utime = utime.Add(time.Minute * 30)
 			hour = (utime.Hour() + 18) % 24
-		}else {
+		} else {
 			hour = utime.Hour()
 		}
 		minute = utime.Minute()

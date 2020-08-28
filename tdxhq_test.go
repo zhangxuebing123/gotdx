@@ -65,3 +65,43 @@ func TestTdxHq_MinuteTimeData(t *testing.T) {
 	mtd := NewTDXMinuteTimeDataRequest(MARKET_SH, "600000")
 	tdx.MinuteTimeData(mtd)
 }
+
+func TestTdxHq_SecurityList(t *testing.T) {
+	//var num uint16 = 0
+	//sl := TDXSecurityListRequest{MARKET_SH, 0}
+	//for{
+	//	rsp := tdx.SecurityList(sl)
+	//	if rsp.Num % 1000 == 0{
+	//		num += rsp.Num
+	//		sl.Start = num
+	//	}else {
+	//		break
+	//	}
+	//}
+	//
+	//num = 0
+	//sl.Market = MARKET_SZ
+	//for{
+	//	rsp := tdx.SecurityList(sl)
+	//	if rsp.Num % 1000 == 0{
+	//		num += rsp.Num
+	//		sl.Start = num
+	//	}else {
+	//		break
+	//	}
+	//}
+}
+
+func TestTdxHq_SecurityQuotes(t *testing.T) {
+	sq := TDXSecurityQuotesRequest{}
+	sq.CodeNum = 2
+
+	reqele := ReqSecurityQuotesElement{}
+	reqele.Market = MARKET_SH
+	copy(reqele.Code[:], "600000")
+	sq.List = append(sq.List, reqele)
+	copy(reqele.Code[:], "600004")
+	sq.List = append(sq.List, reqele)
+
+	tdx.SecurityQuotes(sq)
+}
