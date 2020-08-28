@@ -16,8 +16,9 @@ type TDXHistoryTransactionDataRequest struct {
 
 type TransactionElement struct {
 	Time      string
-	Price     float32
+	Price     float64
 	Vol       int
+	Num   	  int
 	BuyOrSell int
 }
 
@@ -75,7 +76,7 @@ func (c* TDXHistoryTransactionDataMessage) UnSerialize(header interface{}, b []b
 		getprice(b, &pos)
 
 		lastprice = lastprice + priceraw
-		ele.Price = float32(lastprice) / 100
+		ele.Price = float64(lastprice) / 100.0
 		c.List = append(c.List, ele)
 	}
 	return nil

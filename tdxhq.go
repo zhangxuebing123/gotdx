@@ -24,6 +24,8 @@ type ITdxHq interface {
 	MinuteTimeData(TDXMinuteTimeDataRequest) TDXMinuteTimeDataResponse
 	SecurityList(TDXSecurityListRequest) TDXSecurityListResponse
 	SecurityQuotes(TDXSecurityQuotesRequest) TDXSecurityQuotesResponse
+	TransactionData(TDXTransactionDataRequest) TDXTransactionDataResponse
+	XdxrInfo(TDXXdxrInfoRequest) TDXXdxrInfoResponse
 }
 
 func NewTdxHq() ITdxHq {
@@ -137,6 +139,16 @@ func (t *TdxHq) SecurityList(req TDXSecurityListRequest) TDXSecurityListResponse
 func (t *TdxHq) SecurityQuotes(req TDXSecurityQuotesRequest) TDXSecurityQuotesResponse {
 	msg, _ := t.conn.Write(NewTDXSecurityQuotesMessage(req))
 	return msg.(*TDXSecurityQuotesMessage).TDXSecurityQuotesResponse
+}
+
+func (t *TdxHq) TransactionData(req TDXTransactionDataRequest) TDXTransactionDataResponse {
+	msg, _ := t.conn.Write(NewTDXTransactionDataMessage(req))
+	return msg.(*TDXTransactionDataMessage).TDXTransactionDataResponse
+}
+
+func (t *TdxHq) XdxrInfo(req TDXXdxrInfoRequest) TDXXdxrInfoResponse{
+	msg, _ := t.conn.Write(NewTDXXdxrInfoMessage(req))
+	return msg.(*TDXXdxrInfoMessage).TDXXdxrInfoResponse
 }
 
 func (t *TdxHq) OnConnect(c WriteCloser) bool {

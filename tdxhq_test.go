@@ -94,7 +94,6 @@ func TestTdxHq_SecurityList(t *testing.T) {
 
 func TestTdxHq_SecurityQuotes(t *testing.T) {
 	sq := TDXSecurityQuotesRequest{}
-	sq.CodeNum = 2
 
 	reqele := ReqSecurityQuotesElement{}
 	reqele.Market = MARKET_SH
@@ -102,6 +101,24 @@ func TestTdxHq_SecurityQuotes(t *testing.T) {
 	sq.List = append(sq.List, reqele)
 	copy(reqele.Code[:], "600004")
 	sq.List = append(sq.List, reqele)
+	copy(reqele.Code[:], "600006")
+	sq.List = append(sq.List, reqele)
 
 	tdx.SecurityQuotes(sq)
+}
+
+func TestTdxHq_TransactionData(t *testing.T) {
+	tt := TDXTransactionDataRequest{}
+	tt.Market = MARKET_SH
+	copy(tt.Code[:], "600000")
+	tt.Start = 0
+	tt.Count = 30
+	tdx.TransactionData(tt)
+}
+
+func TestTdxHq_XdxrInfo(t *testing.T) {
+	xi := TDXXdxrInfoRequest{}
+	xi.Market = MARKET_SH
+	copy(xi.Code[:], "600000")
+	tdx.XdxrInfo(xi)
 }

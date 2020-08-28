@@ -3,7 +3,6 @@ package imsg
 import (
 	"bytes"
 	"encoding/binary"
-	"fmt"
 	"github.com/axgle/mahonia"
 )
 
@@ -88,7 +87,6 @@ func (c *TDXSecurityListMessage) UnSerialize(header interface{}, b []byte) error
 		ele.PreClose = getvolume(int(precloseraw))
 		pos += 4
 
-		fmt.Println(ele)
 		c.List = append(c.List, ele)
 	}
 	return nil

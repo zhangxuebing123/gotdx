@@ -112,6 +112,8 @@ const (
 	KMSG_MINUTETIMEDATA         = 0x537  // 分时数据
 	KMSG_SECURITYLIST           = 0x450  // 证券列表
 	KMSG_SECURITYQUOTES			= 0x53e  // 行情信息
+	KMSG_TRANSACTIONDATA		= 0xfc5	 // 分笔成交信息
+	KMSG_XDXRINFO				= 0x0f	 // 除权除息信息
 )
 
 type TDXReqHeader struct {
