@@ -25,11 +25,7 @@ func NewTdxHq() ITdxHq {
 	t := &TdxHq{
 		tdxcodec: TdxValueCodec{},
 		heart:    time.Now().UnixNano(),
-		once:     &sync.Once{},
-		wg:       &sync.WaitGroup{},
 	}
-	t.sending = make(chan bool, 1)
-	t.complete = make(chan bool, 1)
 	t.start()
 	<-t.complete
 	return t
@@ -165,7 +161,12 @@ func (t *TdxHq) start() {
 		return
 	}
 
+	t.once = &sync.Once{}
+	t.wg = &sync.WaitGroup{}
+	t.sending = make(chan bool, 1)
+	t.complete = make(chan bool, 1)
 	t.rawConn = c
+
 	logger.Infoln("on connect")
 	t.Write(NewCMD1Message())
 	t.Write(NewCMD2Message())
@@ -177,13 +178,11 @@ func (t *TdxHq) start() {
 	go t.HeartBeatCheck()
 }
 
-// Write writes a message to the client.
 func (t *TdxHq) Write(message Message) (Message, error) {
 	defer func() {
 		if p := recover(); p != nil {
 			logger.Errorf("panics: %v\n", p)
-			t.Release()
-			t.start()
+			t.ReStart()
 		}
 	}()
 
@@ -216,7 +215,7 @@ func (t *TdxHq) HeartBeatCheck() {
 		}
 		t.wg.Done()
 		logger.Debugln("HeartBeat go-routine exited")
-		t.Release()
+		t.ReStart()
 	}()
 	for {
 		select {
@@ -235,6 +234,11 @@ func (t *TdxHq) SetHeartBeat(heart int64) {
 func (t *TdxHq) HeartBeat() int64 {
 	heart := t.heart
 	return heart
+}
+
+func (t *TdxHq) ReStart() {
+	t.Release()
+	t.start()
 }
 
 func (t *TdxHq) Release() {
