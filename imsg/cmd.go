@@ -55,3 +55,30 @@ func (c *CMD2Message) UnSerialize(header interface{}, b []byte) error {
 	c.Content = string(b)
 	return nil
 }
+
+func NewPingMessage() *PingMessage {
+	msg := GetMessage(KMSG_PING)
+	if (msg == nil) {
+		Register(KMSG_PING, new(PingMessage))
+	}
+	sub := GetMessage(KMSG_PING).(*PingMessage)
+	sub.Content = "0c0000000000020002001500"
+	return sub
+}
+
+type PingMessage struct {
+	Content string
+}
+
+func (c *PingMessage) MessageNumber() int32 {
+	return KMSG_PING
+}
+
+func (c *PingMessage) Serialize() ([]byte, error) {
+	return hex.DecodeString(c.Content)
+}
+
+func (c *PingMessage) UnSerialize(header interface{}, b []byte) error {
+	c.Content = string(b)
+	return nil
+}

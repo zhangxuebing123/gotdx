@@ -1,23 +1,72 @@
 package config
 
-var Hosts  = map[string]string{
-	"深圳双线主站1":"120.79.60.82:7709",
-	"深圳双线主站2":"8.129.13.54:7709",
-	"深圳双线主站3":"120.24.149.49:7709",
-	"深圳双线主站4":"47.113.94.204:7709",
-	"深圳双线主站5":"8.129.174.169:7709",
-	"深圳双线主站6":"47.113.123.248:7709",
-	"上海双线主站1":"47.103.48.45:7709",
-	"上海双线主站2":"47.100.236.28:7709",
-	"上海双线主站3":"101.133.214.242:7709",
-	"上海双线主站4":"47.116.21.80:7709",
-	"上海双线主站5":"47.116.105.28:7709",
-	"上海双线主站6":"47.116.10.29:7709",
-	"北京双线主站1":"39.98.234.173:7709",
-	"北京双线主站2":"39.98.198.249:7709",
-	"北京双线主站3":"39.100.68.59:7709",
-	"东莞电信主站	":"113.105.142.162:7709",
-	"广州双线主站1":"106.53.96.220:7709",
-	"广州双线主站2":"106.53.99.72:7709",
-	"广州双线主站3":"106.55.12.89:7709",
+import (
+	"bufio"
+	"fmt"
+	"github.com/axgle/mahonia"
+	"os"
+	"strconv"
+	"strings"
+)
+
+// 通达信网关信息
+
+const (
+	HQHOST   = "HQHOST" // 证券行情
+	EXHQHOST = "DSHOST" // 拓展行情
+)
+
+type TDXConfig struct {
+	sections map[string]map[string]string
+}
+
+func (c *TDXConfig) Load() error {
+	file, err := os.Open("connect.cfg")
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	c.sections = make(map[string]map[string]string)
+	reader := bufio.NewReader(file)
+	var curSectionName string
+	for {
+		line, err := reader.ReadString('\n')
+		if err != nil {
+			return nil
+		}
+		line = strings.TrimSpace(line)
+		if line == "" || line[0] == ':' {
+			continue
+		}
+		if line[0] == '[' && line[len(line)-1] == ']' {
+			curSectionName = line[1 : len(line)-1]
+			c.sections[curSectionName] = make(map[string]string)
+		} else {
+			pair := strings.Split(line, "=")
+			if len(pair) == 2 {
+				c.sections[curSectionName][strings.TrimSpace(pair[0])] = strings.TrimSpace(pair[1])
+			}
+		}
+	}
+	return nil
+}
+
+func (c *TDXConfig) Remoter(tag string) (m map[string]string) {
+	m = make(map[string]string)
+	if (tag == HQHOST) || (tag == EXHQHOST) {
+		section, ok := c.sections[tag]
+		if !ok {
+			return
+		}
+		hostName, _ := strconv.Atoi(c.sections[tag]["HostNum"])
+		enc := mahonia.NewDecoder("gbk")
+		for index := 0; index < hostName; index++ {
+			hostname := fmt.Sprintf("HostName%02d", index+1)
+			ipaddress := fmt.Sprintf("IPAddress%02d", index+1)
+			port := fmt.Sprintf("Port%02d", index+1)
+			m[enc.ConvertString(section[hostname])] = section[ipaddress] + ":" + section[port]
+		}
+	}
+	return
 }

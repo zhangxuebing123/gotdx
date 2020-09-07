@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/binary"
 	"encoding/hex"
-	"fmt"
 	"github.com/axgle/mahonia"
 )
 
@@ -152,7 +151,6 @@ func (c *TDXXdxrInfoMessage) UnSerialize(header interface{}, b []byte) error {
 			ele.HouZongGuBen = c.getv(houzongguben_raw)
 		}
 		ele.Describe = c.getcategoryname(ele.Category)
-		fmt.Println(ele)
 		c.List = append(c.List, ele)
 	}
 	return nil
