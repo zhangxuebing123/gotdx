@@ -2,9 +2,10 @@ package imsg
 
 import "encoding/hex"
 
+// NewCMD1Message 创建登录消息1
 func NewCMD1Message() *CMD1Message {
 	msg := GetMessage(KMSG_CMD1)
-	if (msg == nil) {
+	if msg == nil {
 		Register(KMSG_CMD1, new(CMD1Message))
 	}
 	sub := GetMessage(KMSG_CMD1).(*CMD1Message)
@@ -12,26 +13,31 @@ func NewCMD1Message() *CMD1Message {
 	return sub
 }
 
+// CMD1Message  登录命令
 type CMD1Message struct {
 	Content string
 }
 
+// MessageNumber 消息号
 func (c *CMD1Message) MessageNumber() int32 {
 	return KMSG_CMD1
 }
 
+// Serialize 编码
 func (c *CMD1Message) Serialize() ([]byte, error) {
 	return hex.DecodeString(c.Content)
 }
 
+// UnSerialize 解码
 func (c *CMD1Message) UnSerialize(header interface{}, b []byte) error {
 	c.Content = string(b)
 	return nil
 }
 
+// NewCMD2Message 创建登录消息2
 func NewCMD2Message() *CMD2Message {
 	msg := GetMessage(KMSG_CMD2)
-	if (msg == nil) {
+	if msg == nil {
 		Register(KMSG_CMD2, new(CMD2Message))
 	}
 	sub := GetMessage(KMSG_CMD2).(*CMD2Message)
@@ -58,7 +64,7 @@ func (c *CMD2Message) UnSerialize(header interface{}, b []byte) error {
 
 func NewPingMessage() *PingMessage {
 	msg := GetMessage(KMSG_PING)
-	if (msg == nil) {
+	if msg == nil {
 		Register(KMSG_PING, new(PingMessage))
 	}
 	sub := GetMessage(KMSG_PING).(*PingMessage)
