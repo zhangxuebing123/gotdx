@@ -10,9 +10,9 @@ var tdx ITdxHq
 func TestTdxHq_SecurityCount(t *testing.T) {
 	tdx = NewTdxHq()
 	tdx.BlockInfo(BLOCK_DEFAULT)
-	//tdx.BlockInfo(BLOCK_GN)
-	//tdx.BlockInfo(BLOCK_FG)
-	//tdx.BlockInfo(BLOCK_ZS)
+	tdx.BlockInfo(BLOCK_GN)
+	tdx.BlockInfo(BLOCK_FG)
+	tdx.BlockInfo(BLOCK_ZS)
 }
 
 func TestTdxHq_CompanyInfoCategory(t *testing.T) {
