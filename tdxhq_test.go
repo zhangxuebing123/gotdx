@@ -1,6 +1,7 @@
 package gotdx
 
 import (
+	"fmt"
 	. "gotdx/imsg"
 	"testing"
 )
@@ -67,29 +68,29 @@ func TestTdxHq_MinuteTimeData(t *testing.T) {
 }
 
 func TestTdxHq_SecurityList(t *testing.T) {
-	//var num uint16 = 0
-	//sl := TDXSecurityListRequest{MARKET_SH, 0}
-	//for{
-	//	rsp := tdx.SecurityList(sl)
-	//	if rsp.Num % 1000 == 0{
-	//		num += rsp.Num
-	//		sl.Start = num
-	//	}else {
-	//		break
-	//	}
-	//}
-	//
-	//num = 0
-	//sl.Market = MARKET_SZ
-	//for{
-	//	rsp := tdx.SecurityList(sl)
-	//	if rsp.Num % 1000 == 0{
-	//		num += rsp.Num
-	//		sl.Start = num
-	//	}else {
-	//		break
-	//	}
-	//}
+	var num uint16 = 0
+	sl := TDXSecurityListRequest{MARKET_SH, 0}
+	for {
+		rsp := tdx.SecurityList(sl)
+		if rsp.Num%1000 == 0 {
+			num += rsp.Num
+			sl.Start = num
+		} else {
+			break
+		}
+	}
+
+	num = 0
+	sl.Market = MARKET_SZ
+	for {
+		rsp := tdx.SecurityList(sl)
+		if rsp.Num%1000 == 0 {
+			num += rsp.Num
+			sl.Start = num
+		} else {
+			break
+		}
+	}
 }
 
 func TestTdxHq_SecurityQuotes(t *testing.T) {
@@ -104,7 +105,8 @@ func TestTdxHq_SecurityQuotes(t *testing.T) {
 	copy(reqele.Code[:], "600006")
 	sq.List = append(sq.List, reqele)
 
-	tdx.SecurityQuotes(sq)
+	rsp := tdx.SecurityQuotes(sq)
+	fmt.Print(rsp)
 }
 
 func TestTdxHq_TransactionData(t *testing.T) {

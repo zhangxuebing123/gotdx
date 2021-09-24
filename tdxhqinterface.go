@@ -18,3 +18,7 @@ type ITdxHq interface {
 	TransactionData(TDXTransactionDataRequest) TDXTransactionDataResponse
 	XdxrInfo(TDXXdxrInfoRequest) TDXXdxrInfoResponse
 }
+
+//通达信拓展行情接口
+type ITdxEXHq interface {
+}
